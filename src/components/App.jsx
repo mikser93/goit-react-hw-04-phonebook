@@ -6,26 +6,15 @@ import s from './App.module.css';
 import { useEffect, useState } from 'react';
 
 function App () {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(JSON.parse(localStorage.getItem('contacts')) || []);
   const [filter, setFilter] = useState('');
-  const [mountMarker, setMountMarker] = useState(true);
 
-  // Аналог componentDidMount()
   useEffect(() => {
-    const currentLS = localStorage.getItem('contactsList');
-    if (currentLS) {
-      setContacts(JSON.parse(currentLS));
-    };
-  }, []);
-  
-  // Аналог componentDidUpdate
-  useEffect(() => {
-    if (mountMarker) {
-      setMountMarker(false);
-      return;
-    };
-    localStorage.setItem('contactsList', JSON.stringify(contacts));
-  }, [contacts, mountMarker]);
+    if(!contacts){
+      return
+    }
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
   const addContact = (name, number) => {
     if (
